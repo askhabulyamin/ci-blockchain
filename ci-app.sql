@@ -1,239 +1,150 @@
--- phpMyAdmin SQL Dump
--- version 4.8.3
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Aug 24, 2019 at 08:28 PM
--- Server version: 10.1.35-MariaDB
--- PHP Version: 7.2.9
+/*
+ Navicat Premium Data Transfer
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 100137 (10.1.37-MariaDB)
+ Source Host           : localhost:3306
+ Source Schema         : ci-app
 
+ Target Server Type    : MySQL
+ Target Server Version : 100137 (10.1.37-MariaDB)
+ File Encoding         : 65001
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+ Date: 12/05/2023 16:59:08
+*/
 
---
--- Database: `ci-app`
---
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `image` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `password` varchar(256) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `role_id` int NOT NULL,
+  `is_active` int NOT NULL,
+  `date_created` int NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
---
--- Table structure for table `user`
---
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES (18, 'aqshalzakki', 'kecoatempur2@gmail.com', 'default.jpg', '$2y$10$sCiotAojcOrC6Q2y5rZHU.K7cxrGis1cl0fENCQ9eZqguF1AaFlFi', 1, 1, 1566659364);
+INSERT INTO `user` VALUES (21, 'jonitempur', 'jonitempur2@gmail.com', 'default.jpg', '$2y$10$LMQw8an68EttGvvNoyDdZOZBRA4lP5VnUEtKgWA28DnVM0phiXLQq', 2, 1, 1566659633);
+INSERT INTO `user` VALUES (22, 'yamin2', 'ahmad.yamin@podomorouniversity.ac.id', 'default.jpg', '$2y$10$hAuramorUDe/f8bynX/olO40b/X3sfgjuut4U4VarSxBYvUQEHLn.', 1, 1, 1683793168);
 
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `image` varchar(50) NOT NULL,
-  `password` varchar(256) NOT NULL,
-  `role_id` int(1) NOT NULL,
-  `is_active` int(1) NOT NULL,
-  `date_created` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- ----------------------------
+-- Table structure for user_access_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `user_access_menu`;
+CREATE TABLE `user_access_menu`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_id` int NOT NULL,
+  `menu_id` int NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 134 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
---
--- Dumping data for table `user`
---
+-- ----------------------------
+-- Records of user_access_menu
+-- ----------------------------
+INSERT INTO `user_access_menu` VALUES (1, 1, 1);
+INSERT INTO `user_access_menu` VALUES (3, 2, 2);
+INSERT INTO `user_access_menu` VALUES (116, 1, 2);
+INSERT INTO `user_access_menu` VALUES (128, 1, 4);
+INSERT INTO `user_access_menu` VALUES (130, 2, 5);
+INSERT INTO `user_access_menu` VALUES (133, 1, 3);
 
-INSERT INTO `user` (`id`, `username`, `email`, `image`, `password`, `role_id`, `is_active`, `date_created`) VALUES
-(18, 'aqshalzakki', 'kecoatempur2@gmail.com', 'default.jpg', '$2y$10$sCiotAojcOrC6Q2y5rZHU.K7cxrGis1cl0fENCQ9eZqguF1AaFlFi', 1, 1, 1566659364),
-(21, 'jonitempur', 'jonitempur2@gmail.com', 'default.jpg', '$2y$10$LMQw8an68EttGvvNoyDdZOZBRA4lP5VnUEtKgWA28DnVM0phiXLQq', 2, 1, 1566659633);
+-- ----------------------------
+-- Table structure for user_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `user_menu`;
+CREATE TABLE `user_menu`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `menu` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Records of user_menu
+-- ----------------------------
+INSERT INTO `user_menu` VALUES (1, 'Admin');
+INSERT INTO `user_menu` VALUES (2, 'User');
+INSERT INTO `user_menu` VALUES (3, 'Menu');
+INSERT INTO `user_menu` VALUES (4, 'BIM');
 
---
--- Table structure for table `user_access_menu`
---
+-- ----------------------------
+-- Table structure for user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `user_role`;
+CREATE TABLE `user_role`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
-CREATE TABLE `user_access_menu` (
-  `id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `menu_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- ----------------------------
+-- Records of user_role
+-- ----------------------------
+INSERT INTO `user_role` VALUES (1, 'Administrator');
+INSERT INTO `user_role` VALUES (2, 'Member');
+INSERT INTO `user_role` VALUES (4, 'Operator Manager');
+INSERT INTO `user_role` VALUES (5, 'Owner');
+INSERT INTO `user_role` VALUES (6, 'Architect');
+INSERT INTO `user_role` VALUES (7, 'Engineer');
+INSERT INTO `user_role` VALUES (8, 'Surveyor');
+INSERT INTO `user_role` VALUES (9, 'Contractor');
 
---
--- Dumping data for table `user_access_menu`
---
+-- ----------------------------
+-- Table structure for user_sub_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `user_sub_menu`;
+CREATE TABLE `user_sub_menu`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `menu_id` int NOT NULL,
+  `title` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `url` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `icon` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `is_active` int NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
-INSERT INTO `user_access_menu` (`id`, `role_id`, `menu_id`) VALUES
-(1, 1, 1),
-(3, 2, 2),
-(116, 1, 2),
-(128, 1, 4),
-(130, 2, 5),
-(133, 1, 3);
+-- ----------------------------
+-- Records of user_sub_menu
+-- ----------------------------
+INSERT INTO `user_sub_menu` VALUES (1, 1, 'Dashboard', 'admin', 'fas fa-fw fa-tachometer-alt ', 1);
+INSERT INTO `user_sub_menu` VALUES (2, 2, 'My Profile', 'user', 'fas fa-fw fa-user', 1);
+INSERT INTO `user_sub_menu` VALUES (3, 2, 'Edit Profile', 'user/edit', 'fas fa-fw fa-user-edit', 1);
+INSERT INTO `user_sub_menu` VALUES (5, 3, 'Submenu Management', 'menu/subMenu', 'fas fa-fw fa-folder-open', 1);
+INSERT INTO `user_sub_menu` VALUES (8, 3, 'Menu Management', 'menu', 'fas fa-fw fa-folder', 1);
+INSERT INTO `user_sub_menu` VALUES (9, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-tie', 1);
+INSERT INTO `user_sub_menu` VALUES (10, 2, 'Change Password', 'user/changepassword', 'fas fw fa-key', 1);
+INSERT INTO `user_sub_menu` VALUES (11, 5, 'Video Games', 'article/videogames', 'fas fw fa-gamepad', 1);
+INSERT INTO `user_sub_menu` VALUES (12, 1, 'Video Games', 'article/videogames', 'fas fw fa-gamepad', 1);
+INSERT INTO `user_sub_menu` VALUES (13, 4, 'Block 1', 'tes', 'test', 1);
+INSERT INTO `user_sub_menu` VALUES (14, 4, 'Block  2', 'test', 'test', 1);
 
--- --------------------------------------------------------
+-- ----------------------------
+-- Table structure for user_token
+-- ----------------------------
+DROP TABLE IF EXISTS `user_token`;
+CREATE TABLE `user_token`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `token` varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `date_created` int NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
---
--- Table structure for table `user_menu`
---
+-- ----------------------------
+-- Records of user_token
+-- ----------------------------
+INSERT INTO `user_token` VALUES (27, 'ahmad.yamin@podomorouniversity.ac.id', 'EiaXLLHDqF/56vHLIbm7qSIgyOCVEwVj5byX2N4++Sw=', 1683793168);
 
-CREATE TABLE `user_menu` (
-  `id` int(11) NOT NULL,
-  `menu` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user_menu`
---
-
-INSERT INTO `user_menu` (`id`, `menu`) VALUES
-(1, 'Admin'),
-(2, 'User'),
-(3, 'Menu');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_role`
---
-
-CREATE TABLE `user_role` (
-  `id` int(11) NOT NULL,
-  `role` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user_role`
---
-
-INSERT INTO `user_role` (`id`, `role`) VALUES
-(1, 'Administrator'),
-(2, 'Member'),
-(4, 'Director');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_sub_menu`
---
-
-CREATE TABLE `user_sub_menu` (
-  `id` int(11) NOT NULL,
-  `menu_id` int(11) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `url` varchar(50) NOT NULL,
-  `icon` varchar(50) NOT NULL,
-  `is_active` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user_sub_menu`
---
-
-INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active`) VALUES
-(1, 1, 'Dashboard', 'admin', 'fas fa-fw fa-tachometer-alt ', 1),
-(2, 2, 'My Profile', 'user', 'fas fa-fw fa-user', 1),
-(3, 2, 'Edit Profile', 'user/edit', 'fas fa-fw fa-user-edit', 1),
-(5, 3, 'Submenu Management', 'menu/subMenu', 'fas fa-fw fa-folder-open', 1),
-(8, 3, 'Menu Management', 'menu', 'fas fa-fw fa-folderfas fa-fw fa-folder', 1),
-(9, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-tie', 1),
-(10, 2, 'Change Password', 'user/changepassword', 'fas fw fa-key', 1),
-(11, 5, 'Video Games', 'article/videogames', 'fas fw fa-gamepad', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_token`
---
-
-CREATE TABLE `user_token` (
-  `id` int(11) NOT NULL,
-  `email` varchar(60) NOT NULL,
-  `token` varchar(60) NOT NULL,
-  `date_created` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_access_menu`
---
-ALTER TABLE `user_access_menu`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_menu`
---
-ALTER TABLE `user_menu`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_role`
---
-ALTER TABLE `user_role`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_sub_menu`
---
-ALTER TABLE `user_sub_menu`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_token`
---
-ALTER TABLE `user_token`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
---
--- AUTO_INCREMENT for table `user_access_menu`
---
-ALTER TABLE `user_access_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
-
---
--- AUTO_INCREMENT for table `user_menu`
---
-ALTER TABLE `user_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `user_role`
---
-ALTER TABLE `user_role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `user_sub_menu`
---
-ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `user_token`
---
-ALTER TABLE `user_token`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+SET FOREIGN_KEY_CHECKS = 1;
