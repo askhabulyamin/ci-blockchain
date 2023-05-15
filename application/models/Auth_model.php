@@ -152,7 +152,6 @@ class Auth_model extends CI_Model{
 		$password = $this->input->post('password');
 
 		$user = $this->getUserByEmail($email);
-
 		// if email has found in the user table
 		if ($user){
 

@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	console.log('ok');
 	
-	const baseUrl = 'http://localhost/sb-admin/';
+	const baseUrl = 'http://localhost/ci-blockchain/';
 	
 	// MENU EDIT
 	$('.menu-add').on('click', function(){
@@ -31,7 +31,7 @@ $(document).ready(function(){
 
 			success : function(data){
 				console.log(data);
-				$('.menu-form .id').val(data.id)
+				$('.menu-form .id2').val(data.id)
 				$('.menu-input').val(data.menu)
 			}
 		})
