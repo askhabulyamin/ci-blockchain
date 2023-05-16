@@ -57,7 +57,7 @@
       </div>
       <form class="menu-form" action="<?= base_url('menu'); ?>" method="post">
       		<!-- hidden id -->
-      		<input type="hidden" name="id" class="id">
+      		<input type="hidden" name="id" class="id1">
 		      <div class="modal-body menu-body">
 		        <input class="form-control menu-input" type="text" id="menu" name="menu" placeholder="Menu name">
 		      </div>
