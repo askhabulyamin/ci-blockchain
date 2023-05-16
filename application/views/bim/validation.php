@@ -26,9 +26,9 @@
                     <?= $this->session->flashdata('message'); ?>
                     <form action="http://localhost/ci-blockchain/block/save" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 
-                    <div class="form-group row">
+                    <div class="form-group row">  
                         <label for="email" class="col-sm-2 col-form-label">Type</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-10"> 
                             <input name="email" type="text" class="form-control" id="email" value="ahmad.askhabulyamin@gmail.com" readonly="">
                         </div>
                     </div>
