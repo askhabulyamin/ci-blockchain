@@ -7,7 +7,9 @@ class Block extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Auth_model', 'Auth');
+		$this->load->library('encryption'); // load library secure yg telah kita buat
 		$this->load->model('Block_model');
+		$this->load->model('Admin_model', 'admin');
 		
 		$this->load->library('form_validation');
 		// is_logged_in();
@@ -18,7 +20,7 @@ class Block extends CI_Controller {
 		// get user information
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		
-		$data['block'] = $this->Block_model->getblock();
+		$data['block'] = $this->Block_model->getBlock();
 		$data['title'] = 'block Management';
 		
 		$this->form_validation->set_rules('block', 'block', 'required|trim|alpha_numeric_spaces', [
@@ -43,23 +45,61 @@ class Block extends CI_Controller {
 		// get user information
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		
-		$data['block'] = $this->Block_model->getblock();
-		$data['title'] = 'block Management';
+		$data['block'] = $this->Block_model->getBlock();
+		$data['role'] = $this->admin->getRole(); 
+
+		$data['title'] = 'Validation';
 		
-		$this->form_validation->set_rules('block', 'block', 'required|trim|alpha_numeric_spaces', [
-			'alpha_numeric_spaces' => 'block name must contains alpha numeric only!'
-			]);
-			if ($this->form_validation->run() == FALSE)
+		// cek hash blockchain
+		$prev = $this->Block_model->getLastBlock();
+		// print_r($prev[0]['previous_blockchain']);die();
+		if ($prev){
+			if (is_null($prev[0]['previous_blockchain']))
 			{
-				$this->load->view('templates/header', $data);
-				$this->load->view('templates/sidebar', $data);
-				$this->load->view('templates/topbar', $data);
-				$this->load->view('bim/validation', $data);
-				$this->load->view('templates/footer');
+				$prev_hash = "0000000000000000xxx";
 			}else{
-				$this->Block_model->addblock($this->input->post('block'));
+				$prev_hash =$prev[0]['previous_blockchain'];
 			}
-			
+			$prev_hash = $prev_hash;
+	
+		}else{
+			$prev_hash = "0000000000000000xxx";
+
+		}
+		$data['hash'] = $prev_hash;
+		// $prev_hash = "0000000000000000xxx";
+		// print_r($this->encryption->encrypt('ml'));die();
+		$create = $this->Auth->getUserByEmail($this->session->userdata('email'));
+		$this->form_validation->set_rules('project_name', 'Project Name', 'required|trim');
+		$this->form_validation->set_rules('type', 'Type', 'required|trim');
+		$this->form_validation->set_rules('role', 'Role', 'required|trim');
+
+		if ($this->form_validation->run() == false){
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/sidebar', $data);
+			$this->load->view('templates/topbar', $data);
+			$this->load->view('bim/validation', $data);
+			$this->load->view('templates/footer');
+
+		}else{ 	
+			$data = [
+				'project_name' => $this->input->post('project_name'),
+				'type' => $this->input->post('type'),
+				'role' => $this->input->post('role'),
+				'file' => $_FILES['file']['name'],
+				'previous_blockchain' => $this->encryption->encrypt($prev_hash),
+				'hash_bim' => $this->encryption->encrypt($prev_hash),
+				'nonce' => $this->encryption->encrypt($prev_hash),
+				'transaction' => $this->encryption->encrypt($prev_hash),
+				'date_create' => date('Y-m-d H:i:s'),
+				'create_by' =>$this->session->userdata('email'),
+				'create_to' => $this->input->post('role')
+			];
+
+			// send it to model
+			$this->Block_model->addProject($data);
+		}
+				
 	}
 
 	// Verification
@@ -79,7 +119,7 @@ class Block extends CI_Controller {
 				$this->load->view('templates/header', $data);
 				$this->load->view('templates/sidebar', $data);
 				$this->load->view('templates/topbar', $data);
-				$this->load->view('bim/block', $data);
+				$this->load->view('bim/verification', $data);
 				$this->load->view('templates/footer');
 			}else{
 				$this->Block_model->addblock($this->input->post('block'));
