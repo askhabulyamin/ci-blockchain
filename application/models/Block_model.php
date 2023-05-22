@@ -2,93 +2,122 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Block_model extends CI_Model{
+    private $block;
+    public function __construct()
+    {
+        parent::__construct();
 
-	// MENU SECTION
+        $this->block = $this->db->get_where('project')->row_array();
+    }
 
-	// get all menu
+	// project SECTION
+
+	// get all project
 	public function getBlock()
 	{
-		return $this->db->get('user_menu')->result_array();
+		return $this->db->get('project')->result_array();
 	}
 
-	// get all menu except admin column
-	public function getBlockExceptAdmin()
+	// get last project
+    public function getLastBlock()
 	{
-		$this->db->where('id !=',1);
-		return $this->db->get('user_menu')->result_array();
-	}
-	
-	// get menu by id
-	public function getBlockById($id)
-	{
-		return $this->db->get_where('user_menu', ['id', $id])->row_array();
+        $query = "SELECT * FROM `project` ORDER by id DESC LIMIT 1
+               ";
+		return $this->db->query($query)->result_array();
 	}
 
-	// add new menu
-	public function addMenu($menu)
+
+	// add new project
+	public function addProject($data)
 	{
-		$this->db->insert('user_menu', ['menu' => $menu]);
-		message('New menu added!','success','menu');
+        // if user upload file
+        if ($data['file']){
+            // configuration
+            $config['allowed_types']        = 'gif|jpg|jpeg|png|iso|dmg|zip|rar|doc|docx|xls|xlsx|ppt|pptx|csv|ods|odt|odp|pdf|rtf|sxc|sxi|txt|exe|avi|mpeg|mp3|mp4|3gp';
+            $config['upload_path']          = './uploads/';
+            $config['max_size']             = 100000;
+
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+            
+            if ($this->upload->do_upload('file')){
+                
+                // $old_file = $this->block['file'];
+                // // hapus gambar sebelumnya kecuali gambar default
+                // if ($old_file != 'default.jpg'){
+                //     // var_dump( FCPATH . 'uploads/' . $old_file);die;
+                //     unlink(FCPATH . 'uploads' . $old_file);
+                // }
+
+                $this->db->set('file', $data['file']);
+            }else{
+                message($this->upload->display_errors(), 'danger', 'block/validation');
+            }
+        }
+
+        
+		$this->db->insert('project', $data);
+		message('New project added!','success','block/validation');
 	}
 
-	// delete menu by id
-	public function deleteMenu($id)
+	// delete project by id
+	public function deleteproject($id)
 	{
 		$this->db->where('id', $id);
-		$this->db->delete('user_menu');
-		message('Menu has been deleted!', 'success', 'menu');
+		$this->db->delete('project');
+		message('project has been deleted!', 'success', 'project');
 	}
 
-	// edit menu
-	public function editMenu($data)
+	// edit project
+	public function editproject($data)
 	{
 		$this->db->where('id', $data['id']);
-		$this->db->update('user_menu', $data);
+		$this->db->update('project', $data);
 
-		message('Menu has been edited!', 'success', 'menu');
+		message('project has been edited!', 'success', 'project');
 	}
 
-	// SUBMENU SECTION 
+	// SUBproject SECTION 
 
-	// get submenu
-	public function getSubMenu()
+	// get subproject
+	public function getSubproject()
 	{
-		$query = "SELECT `user_sub_menu`.*, `user_menu`.`menu`
-				  FROM `user_sub_menu` JOIN `user_menu`
-				  ON `user_sub_menu`.`menu_id` = `user_menu`.`id`
+		$query = "SELECT `user_sub_project`.*, `project`.`project`
+				  FROM `user_sub_project` JOIN `project`
+				  ON `user_sub_project`.`project_id` = `project`.`id`
 		";
 
 		return $this->db->query($query)->result_array();
 	}
 
-	// get submenu by id
-	public function getSubMenuById($id)
+	// get subproject by id
+	public function getSubprojectById($id)
 	{
-		return $this->db->get_where('user_sub_menu', ['id' => $id])->row_array();
+		return $this->db->get_where('user_sub_project', ['id' => $id])->row_array();
 	}
 
-	// add submenu
-	public function addSubMenu($data)
+	// add subproject
+	public function addSubproject($data)
 	{
-		$this->db->insert('user_sub_menu', $data);
-		message('New Submenu has been added!', 'success', 'menu/subMenu');
+		$this->db->insert('user_sub_project', $data);
+		message('New Subproject has been added!', 'success', 'project/subproject');
 	}
 
-	// delete submenu
-	public function deleteSubmenu($id)
+	// delete subproject
+	public function deleteSubproject($id)
 	{
 		$this->db->where('id', $id);
-		$this->db->delete('user_sub_menu');
+		$this->db->delete('user_sub_project');
 
-		message('Submenu has been deleted!', 'success', 'menu/subMenu');
+		message('Subproject has been deleted!', 'success', 'project/subproject');
 	}
 
-	// edit submenu
-	public function editSubmenu($data)
+	// edit subproject
+	public function editSubproject($data)
 	{
 		$this->db->where('id', $data['id']);
-		$this->db->update('user_sub_menu', $data);
+		$this->db->update('user_sub_project', $data);
 
-		message('Submenu has been edited!', 'success', 'menu/subMenu');
+		message('Subproject has been edited!', 'success', 'project/subproject');
 	}
 }	

@@ -204,5 +204,9 @@ class Auth_model extends CI_Model{
 	public function getUserByEmail($email)
 	{
 		return $this->db->get_where('user', ['email' => $email])->row_array();
+		// $query = "SELECT * FROM user AS u JOIN user_token AS ut ON u.email = ut.email
+		// 		  WHERE u.email = '$email'
+		// 		 ";
+		// return $this->db->query($query)->row_array();
 	}
 }
