@@ -15,7 +15,11 @@ class Block_model extends CI_Model{
 	// get all project
 	public function getBlock()
 	{
-		return $this->db->get('project')->result_array();
+		$role_id = $this->session->userdata('role_id');
+		$query = "SELECT * FROM `project` JOIN user_role ON `user_role`.`id` = `project`.`role` WHERE `user_role`.`id` = $role_id ORDER by project.id DESC LIMIT 1
+		";
+
+		return $this->db->query($query)->result_array();
 	}
 
 	// get last project
