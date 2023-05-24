@@ -21,7 +21,7 @@ class Block extends CI_Controller {
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		
 		$data['block'] = $this->Block_model->getBlock();
-		$data['title'] = 'block Management';
+		$data['title'] = 'Block Management';
 		
 		$this->form_validation->set_rules('block', 'block', 'required|trim|alpha_numeric_spaces', [
 			'alpha_numeric_spaces' => 'block name must contains alpha numeric only!'

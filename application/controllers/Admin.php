@@ -18,7 +18,7 @@ class Admin extends CI_Controller {
 	{
 		// get user information
 		$data['user'] = $this->Auth_model->getUserByEmail( $this->session->userdata('email') );
-		$data['title'] = 'Welcome! Blockchain Building Information Modelling (BIM) System';
+		$data['title'] = 'Blockchain-Building Information Modeling (BIM) System';
 		
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/sidebar', $data);
