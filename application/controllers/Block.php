@@ -19,8 +19,8 @@ class Block extends CI_Controller {
 	{
 		// get user information
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
-		
-		$data['block'] = $this->Block_model->getBlock();
+		$getid = $_GET['id'];
+		$data['block'] = $this->Block_model->getBlock($getid);
 		$data['title'] = 'Block Management';
 		
 		$this->form_validation->set_rules('block', 'block', 'required|trim|alpha_numeric_spaces', [
@@ -39,13 +39,39 @@ class Block extends CI_Controller {
 			
 	}
 
+	public function home()
+	{
+		// get user information
+		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
+		
+		$getid = $_GET['id'];
+		$data['block'] = $this->Block_model->getBlock($getid);
+		$data['title'] = 'Block Folder';
+		
+		$this->form_validation->set_rules('block', 'block', 'required|trim|alpha_numeric_spaces', [
+			'alpha_numeric_spaces' => 'block name must contains alpha numeric only!'
+			]);
+			if ($this->form_validation->run() == FALSE)
+			{
+				$this->load->view('templates/header', $data);
+				$this->load->view('templates/sidebar', $data);
+				$this->load->view('templates/topbar', $data);
+				$this->load->view('bim/home', $data);
+				$this->load->view('templates/footer');
+			}else{
+				$this->Block_model->addblock($this->input->post('block'));
+			}
+			
+	}
+
 	// Validation
 	public function validation()
 	{
 		// get user information
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		
-		$data['block'] = $this->Block_model->getBlock();
+		$getid = $_GET['id'];
+		$data['block'] = $this->Block_model->getBlock($getid);
 		$data['role'] = $this->admin->getRole(); 
 
 		$data['title'] = 'Validation';
@@ -69,10 +95,9 @@ class Block extends CI_Controller {
 		$data['hash'] = $prev_hash;
 		// $prev_hash = "0000000000000000xxx";
 		// print_r($this->encryption->encrypt('ml'));die();
-		$create = $this->Auth->getUserByEmail($this->session->userdata('email'));
 		$this->form_validation->set_rules('project_name', 'Project Name', 'required|trim');
 		$this->form_validation->set_rules('type', 'Type', 'required|trim');
-		$this->form_validation->set_rules('role', 'Role', 'required|trim');
+		// $this->form_validation->set_rules('role', 'Role', 'required|trim');
 
 		if ($this->form_validation->run() == false){
 			$this->load->view('templates/header', $data);
@@ -85,7 +110,8 @@ class Block extends CI_Controller {
 			$data = [
 				'project_name' => $this->input->post('project_name'),
 				'type' => $this->input->post('type'),
-				'role' => $this->input->post('role'),
+				'role' => $this->session->userdata('role_id'),
+				'sub_menuid' => $this->input->post('getidsub'),
 				'file' => $_FILES['file']['name'],
 				'previous_blockchain' => $this->encryption->encrypt($prev_hash),
 				'hash_bim' => $this->encryption->encrypt($prev_hash),
@@ -93,7 +119,6 @@ class Block extends CI_Controller {
 				'transaction' => $this->encryption->encrypt($prev_hash),
 				'date_create' => date('Y-m-d H:i:s'),
 				'create_by' =>$this->session->userdata('email'),
-				'create_to' => $this->input->post('role')
 			];
 
 			// send it to model
@@ -108,7 +133,8 @@ class Block extends CI_Controller {
 		// get user information
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		
-		$data['block'] = $this->Block_model->getblock();
+		// $getid = $_GET['id'];
+		// $data['block'] = $this->Block_model->getBlock($getid);
 		$data['title'] = 'block Management';
 		
 		$this->form_validation->set_rules('block', 'block', 'required|trim|alpha_numeric_spaces', [
@@ -134,7 +160,8 @@ class Block extends CI_Controller {
 		// get user information
 		$data['user'] = $this->Auth->getUserByEmail($this->session->userdata('email'));
 
-		$data['block'] = $this->Block_model->getblock();
+		$getid = $_GET['id'];
+		$data['block'] = $this->Block_model->getBlock($getid);
 		$data['title'] = 'block Management';
 
 		$this->form_validation->set_rules('block', 'block', 'required|trim|alpha_numeric_spaces', [
@@ -157,7 +184,8 @@ class Block extends CI_Controller {
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		
 		// get block
-		$data['block'] = $this->Block_model->getblock();
+		$getid = $_GET['id'];
+		$data['block'] = $this->Block_model->getBlock($getid);
 		
 		// get subblock
 		$data['subblock'] = $this->Block_model->getSubblock();
@@ -199,7 +227,8 @@ class Block extends CI_Controller {
 		$data['user'] = $this->Auth->getUserByEmail($this->session->userdata('email'));
 
 		// get block
-		$data['block'] = $this->Block_model->getblock();
+		$getid = $_GET['id'];
+		$data['block'] = $this->Block_model->getBlock($getid);
 
 		// get subblock
 		$data['subblock'] = $this->Block_model->getSubblock();

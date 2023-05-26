@@ -66,7 +66,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="submenu-form" action="<?= base_url('menu/subMenu'); ?>" method="post">
+      <form class="submenu-form" action="<?= base_url('menu/subMenu'); ?>" enctype="multipart/form-data" method="post">
       		<!-- HIDDEN ID -->
       		<input class="id" type="hidden" name="id" value="">
 		      <div class="modal-body submenu-body">
@@ -89,6 +89,9 @@
 				 
 				 <div class="form-group">
 		        	<input class="form-control icon" type="text" id="icon" name="icon" placeholder="Submenu icon">
+				 </div>
+				 <div class="form-group">
+		        	<input class="icon" type="file" id="icon_file" name="icon_file">
 				 </div>
 				 
 				 <div class="form-group">

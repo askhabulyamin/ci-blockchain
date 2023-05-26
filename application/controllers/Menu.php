@@ -24,16 +24,21 @@ class Menu extends CI_Controller {
 		$this->form_validation->set_rules('menu', 'Menu', 'required|trim|alpha_numeric_spaces', [
 			'alpha_numeric_spaces' => 'Menu name must contains alpha numeric only!'
 			]);
-			if ($this->form_validation->run() == FALSE)
-			{
-				$this->load->view('templates/header', $data);
-				$this->load->view('templates/sidebar', $data);
-				$this->load->view('templates/topbar', $data);
-				$this->load->view('menu/index', $data);
-				$this->load->view('templates/footer');
-			}else{
-				$this->Menu_model->addMenu($this->input->post('menu'));
-			}
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/sidebar', $data);
+			$this->load->view('templates/topbar', $data);
+			$this->load->view('menu/index', $data);
+			$this->load->view('templates/footer');
+		} else{
+			$data = [
+				'menu' => $this->input->post('menu'),
+				'icon' => $_FILES['icon']['name']
+			];
+			$this->Menu_model->addMenu($data);
+		}
 			
 	}
 
@@ -56,7 +61,11 @@ class Menu extends CI_Controller {
 			$this->load->view('menu/index', $data);
 			$this->load->view('templates/footer');
 		}else{
-			$this->Menu_model->editMenu($this->input->post());
+			$data = [
+				'menu' => $this->input->post('menu'),
+				'icon' => $_FILES['icon']['name']
+			];
+			$this->Menu_model->editMenu($data);
 		}
 	}
 	
@@ -91,6 +100,7 @@ class Menu extends CI_Controller {
 				'title' => $this->input->post('title'),
 				'menu_id' => $this->input->post('menu_id'),
 				'url' => $this->input->post('url'),
+				'icon_file' => $_FILES['file']['name'],
 				'icon' => $this->input->post('icon'),
 				'is_active' => $this->input->post('is_active')
 			];
@@ -161,6 +171,9 @@ class Menu extends CI_Controller {
 
 	public function getMenuEdit()
 	{
+		// $id = $this->input->post('id');
+		// print_r($this->Menu_model->getMenuById($id));die();
+		// echo json_encode($this->Menu_model->getMenuById($id));
 		$id = $this->input->post('id');
 		echo json_encode($this->Menu_model->getMenuById($id));
 	}

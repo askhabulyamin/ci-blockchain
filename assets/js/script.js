@@ -1,6 +1,4 @@
 $(document).ready(function(){
-	console.log('ok');
-	
 	const baseUrl = 'http://localhost/ci-blockchain/';
 	
 	// MENU EDIT
@@ -10,29 +8,31 @@ $(document).ready(function(){
 		$('.menu-footer button[type=submit]').attr('class', 'btn btn-primary')
 		$('.menu-form').attr('action', baseUrl + 'menu')
 
+		$('.id').val('')
 		$('.menu-input').val('')
 	})
 
 	$('.menu-edit').on('click', function(){
-		$('.menu-title').html('Edit Menu')
+		$('.menu-title').html('Edit Submenu')
 		$('.menu-footer button[type=submit]').html('Edit')
 		$('.menu-footer button[type=submit]').attr('class', 'btn btn-success')
 		$('.menu-form').attr('action', baseUrl + 'menu/editMenu')
 
-		const id = $(this).data('id')
+		// const id = $(this).data('id')
+		var id = $(this).attr("data-id");
+		console.log(id);
 
-		// YANG INI GAK JALAN JALAN LAH AJAXNYA ASW
 		// run ajax
 		$.ajax({
 			url : baseUrl + 'menu/getMenuEdit',
-			data : {id : id},
 			method : 'post',
+			data : {id : id},
 			dataType : 'json',
-
 			success : function(data){
-				console.log(data);
-				$('.menu-form .id2').val(data.id)
-				$('.menu-input').val(data.menu)
+				console.log(data)
+				// $('.id').val(data.id)
+				// $('.menu-input').val(data.id)
+				
 			}
 		})
 	})
@@ -60,6 +60,7 @@ $(document).ready(function(){
 		$('.submenu-form').attr('action', baseUrl + 'menu/editSubmenu')
 
 		const id = $(this).data('id')
+		// var id = $(this).attr("data-id");
 		// run ajax
 		$.ajax({
 			url : baseUrl + 'menu/getSubmenuEdit',

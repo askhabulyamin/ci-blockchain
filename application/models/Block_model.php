@@ -13,10 +13,11 @@ class Block_model extends CI_Model{
 	// project SECTION
 
 	// get all project
-	public function getBlock()
+	public function getBlock($getid)
 	{
 		$role_id = $this->session->userdata('role_id');
-		$query = "SELECT * FROM `project` JOIN user_role ON `user_role`.`id` = `project`.`role` WHERE `user_role`.`id` = $role_id ORDER by project.id DESC LIMIT 1
+		$query = "SELECT * FROM `project` JOIN `user_role` ON `user_role`.`id` = `project`.`role` 
+		WHERE `project`.`role` = $role_id AND `project`.`sub_menuid` = $getid ORDER by project.id DESC
 		";
 
 		return $this->db->query($query)->result_array();
@@ -61,7 +62,7 @@ class Block_model extends CI_Model{
 
         
 		$this->db->insert('project', $data);
-		message('New project added!','success','block/validation');
+		message('New project added!','success','admin');
 	}
 
 	// delete project by id

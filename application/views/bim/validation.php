@@ -7,7 +7,10 @@
                 <?= validation_errors(); ?>
             </div>
         <?php endif; ?>
-        <?= $this->session->flashdata('message'); ?>
+        <?= 
+        $this->session->flashdata('message');
+        $getidsub = $_GET['id'];
+         ?>
         </div>
     </div>
 
@@ -40,6 +43,7 @@
                 <div class="card-header">BIM Project</div>
                 <div class="card-body">
                         <!-- Form Row-->
+                        <input type="hidden" name="getidsub" value="<?= $getidsub?>">
                         <div class="form-group">
                             <label class=" mb-1" for="name">Project Name</label>
                             <input class="form-control" id="name" name="project_name" type="text" placeholder="Enter your project name" value="">
@@ -50,7 +54,7 @@
 
                         </div>
                         <!-- Form Group (Roles)-->
-                        <div class="form-group mb-3">
+                        <!-- <div class="form-group mb-3">
                             <label class=" mb-1">Role</label>
                             <select class="form-control" name="role" aria-label="Default select example">
                                 <option selected="" disabled="">Select </option>
@@ -59,7 +63,7 @@
                                 <?php endforeach; ?>
 
                             </select>
-                        </div>
+                        </div> -->
                         <!-- Submit button-->
                         <button class="btn btn-primary" type="submit">Validate</button>
                 </div>

@@ -25,6 +25,14 @@
       ?>
 
       <!-- LOOPING MENU -->
+
+      <li class="nav-item active">
+          <a class="nav-link" href="<?= base_url('admin'); ?>">
+              <i class="fas fa-fw fa-tachometer-alt"></i>
+              <span>Dashboard</span></a>
+      </li>
+      <hr class="sidebar-divider">
+
       <?php foreach($menu as $m) : ?>
         <div class="sidebar-heading">
           <?= $m['menu']; ?>
@@ -33,11 +41,20 @@
       <!-- SIAPKAN SUB-MENU SESUAI MENU -->
         <?php 
           $menuId = $m['id'];
-          $querySubMenu = "SELECT* 
+          $querySubMenu = "SELECT * 
                               FROM `user_sub_menu`
-                             WHERE `menu_id` = $menuId
-                               AND `is_active` = 1
+                              WHERE NOT Id = 1 AND menu_id = $menuId
+                              AND `is_active` = 1 
+                               
           ";
+          // $querySubMenu = "SELECT *FROM `user_sub_menu` 
+          //                 LEFT JOIN `user_menu` ON `user_sub_menu`.`menu_id` = `user_menu`.`id`
+          //                 LEFT  JOIN `user_access_menu` ON `user_menu`.`id` = `user_access_menu`.`menu_id`
+          //                 LEFT JOIN `user_role` ON `user_access_menu`.`role_id` = `user_role`.`id`
+          //                 WHERE NOT (`user_sub_menu`.`menu_id`= 1 OR `user_sub_menu`.`menu_id`= 2 OR `user_sub_menu`.`menu_id`= 3 
+          //                 or `user_sub_menu`.`id`= 1 or `user_sub_menu`.`id`= 1 OR `user_menu`.`id` = $menuId) 
+          //                 AND `user_access_menu`.`role_id` = $role_id
+          // ";
           $subMenu = $this->db->query($querySubMenu)->result_array(); 
         ?>  
         <?php foreach ($subMenu as $sm) : ?>

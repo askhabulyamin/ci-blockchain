@@ -18,16 +18,37 @@ class Menu_model extends CI_Model{
 		return $this->db->get('user_menu')->result_array();
 	}
 	
-	// get menu by id
-	public function getMenuById($id)
-	{
-		return $this->db->get_where('user_menu', ['id', $id])->row_array();
-	}
+	
 
 	// add new menu
-	public function addMenu($menu)
+	public function addMenu($data)
 	{
-		$this->db->insert('user_menu', ['menu' => $menu]);
+		// if user upload file
+        if ($data['icon']){
+            // configuration
+            $config['allowed_types']        = 'gif|jpg|png';
+            $config['upload_path']          = './assets/img/';
+            $config['max_size']             = 100000;
+
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+           
+            if ($this->upload->do_upload('icon')){
+                
+                $old_image = $this->user['icon'];
+                // hapus gambar sebelumnya kecuali gambar default
+               if ($old_image != 'default.jpg'){
+                    // var_dump( FCPATH . 'assets/img/profile/' . $old_image);die;
+                    unlink(FCPATH . 'assets/img/' . $old_image);
+               }
+
+                $this->db->set('icon', $data['icon']);
+            }else{
+                message($this->upload->display_errors(), 'danger', 'menu');
+            }
+        }
+
+		$this->db->insert('user_menu', $data);
 		message('New menu added!','success','menu');
 	}
 
@@ -60,6 +81,13 @@ class Menu_model extends CI_Model{
 
 		return $this->db->query($query)->result_array();
 	}
+	
+	// get menu by id
+	public function getMenuById($id)
+	{
+		// print_r($id);die();
+		return $this->db->get_where('user_menu', ['id', $id])->row_array();
+	}
 
 	// get submenu by id
 	public function getSubMenuById($id)
@@ -70,6 +98,30 @@ class Menu_model extends CI_Model{
 	// add submenu
 	public function addSubMenu($data)
 	{
+		// if user upload file
+        if ($data['icon_file']){
+            // configuration
+            $config['allowed_types']        = 'gif|jpg|png';
+            $config['upload_path']          = './assets/img/';
+            $config['max_size']             = 100000;
+
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+           
+            if ($this->upload->do_upload('icon_file')){
+                
+                $old_image = $this->user['icon_file'];
+                // hapus gambar sebelumnya kecuali gambar default
+               if ($old_image != 'default.jpg'){
+                    // var_dump( FCPATH . 'assets/img/profile/' . $old_image);die;
+                    unlink(FCPATH . 'assets/img/' . $old_image);
+               }
+
+                $this->db->set('icon_file', $data['icon_file']);
+            }else{
+                message($this->upload->display_errors(), 'danger', 'menu');
+            }
+        }
 		$this->db->insert('user_sub_menu', $data);
 		message('New Submenu has been added!', 'success', 'menu/subMenu');
 	}
@@ -86,6 +138,30 @@ class Menu_model extends CI_Model{
 	// edit submenu
 	public function editSubmenu($data)
 	{
+		// if user upload file
+        if ($data['icon_file']){
+            // configuration
+            $config['allowed_types']        = 'gif|jpg|png';
+            $config['upload_path']          = './assets/img/';
+            $config['max_size']             = 100000;
+
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+           
+            if ($this->upload->do_upload('icon_file')){
+                
+                $old_image = $this->user['icon_file'];
+                // hapus gambar sebelumnya kecuali gambar default
+               if ($old_image != 'default.jpg'){
+                    // var_dump( FCPATH . 'assets/img/profile/' . $old_image);die;
+                    unlink(FCPATH . 'assets/img/' . $old_image);
+               }
+
+                $this->db->set('icon_file', $data['icon_file']);
+            }else{
+                message($this->upload->display_errors(), 'danger', 'menu');
+            }
+        }
 		$this->db->where('id', $data['id']);
 		$this->db->update('user_sub_menu', $data);
 
