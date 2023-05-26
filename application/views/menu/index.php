@@ -27,7 +27,7 @@
 					      <th scope="row"><?= $i++; ?></th>
 					      <td><?= $m['menu']; ?></td>
 					      <td>
-							<a href="" data-id="<?= $m['id']; ?>" class="badge badge-success menu-edit" data-toggle="modal" data-target="#newMenuModal">Edit</a>
+							<!-- <a href="" data-id="<?= $m['id']; ?>" class="badge badge-success menu-edit" data-toggle="modal" data-target="#newMenuModal">Edit</a> -->
 							<a onclick="return confirm('Delete this menu?')" href="<?= base_url('menu/delete/menu/').$m['id']; ?>" class="badge badge-danger">Delete</a>
 					      </td>
 					    </tr>
@@ -55,11 +55,21 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="menu-form" action="<?= base_url('menu'); ?>" method="post">
+      <form class="menu-form" action="<?= base_url('menu'); ?>" enctype="multipart/form-data" method="post">
       		<!-- hidden id -->
-      		<input type="hidden" name="id" class="id1">
-		      <div class="modal-body menu-body">
-		        <input class="form-control menu-input" type="text" id="menu" name="menu" placeholder="Menu name">
+      		<input class="id" type="hidden" name="id" value="">
+		      <div class="modal-body menu-body row">
+				<div class="col-md-12">
+					<div class="form-group">
+		        		<input class="form-control menu-input" type="text" id="menu" name="menu" placeholder="Menu name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-12 col-form-label">Icon-block</label>
+					<div class="col-md-8">
+						<input class="icon" type="file" id="icon" name="icon">
+					</div>
+				</div>
 		      </div>
 	      <div class="modal-footer menu-footer">
 	      	<button type="submit" class="btn btn-primary">Add</button>

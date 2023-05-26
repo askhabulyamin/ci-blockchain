@@ -23,7 +23,7 @@
 <style>
     .bg-login {
       background-color: #4e73df;
-      background-image: url(assets/img/BIMS.jpeg) !important;
+      background-image: url(assets/img/blockchain-BIM.jpg) !important;
       background-size: cover;
     }
   </style>
