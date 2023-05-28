@@ -126,6 +126,79 @@ class Block extends CI_Controller {
 		}
 				
 	}
+	// Validation
+	public function transaction()
+	{
+		// get user information
+		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
+		$token = $this->Auth->getUserByEmail( $this->session->userdata('email') );
+		// $getid = $_GET['id'];
+		// $data['block'] = $this->Block_model->getBlock($getid);
+		$data['transaction'] = $this->Block_model->getTransaction(); 
+
+		if ($this->Block_model->getSaldo($token['token'])){
+			$getsaldo = $this->Block_model->getSaldo($token['token']);
+			$saldo = $getsaldo[0]['value'];
+			// var_dump($getsaldo);
+		} else {
+			$saldo = 0;
+		}
+		$data['saldo'] = $saldo;
+		$data['title'] = 'Transaction';
+		
+		// cek hash blockchain
+		$prev = $this->Block_model->getLastTransaction();
+		// print_r($prev[0]['previous_blockchain']);die();
+		if ($prev){
+			if (is_null($prev[0]['value']))
+			{
+				$prev_hash = "0";
+			}else{
+				$prev_hash =$prev[0]['value'];
+			}
+			$prev_hash = $prev_hash;
+	
+		}else{
+			$prev_hash = "0";
+
+		}
+		$data['hash'] = $prev_hash + $this->input->post('value');
+		// $prev_hash = "0000000000000000xxx";
+		// print_r($this->encryption->encrypt('ml'));die();
+		$this->form_validation->set_rules('to_address', 'To Address', 'required|trim');
+		$this->form_validation->set_rules('value', 'Value', 'required|trim');
+		// $this->form_validation->set_rules('role', 'Role', 'required|trim');
+
+		if ($this->form_validation->run() == false){
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/sidebar', $data);
+			$this->load->view('templates/topbar', $data);
+			$this->load->view('bim/transaction', $data);
+			$this->load->view('templates/footer');
+
+		}else{ 
+			// cek token di user token	
+			$cektoken = $this->Block_model->getToken($this->input->post('to_address'));
+
+			if ($cektoken){
+				$data = [
+					'id_block' => '',
+					'address' => $this->input->post('address'),
+					'to_address' => $this->input->post('to_address'),
+					'value' => $this->input->post('value'),
+					'status' => '0',
+					'date_create' =>  date('Y-m-d H:i:s'),
+				];
+				$this->Block_model->addTransaction($data);
+	
+			} else {
+				message('Failed Send! Smart Contract is invalid.', 'danger', 'block/transaction');
+			}
+
+			// send it to model
+		}
+				
+	}
 
 	// Verification
 	public function verification()

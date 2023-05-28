@@ -4,6 +4,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Menu_model extends CI_Model{
 
 	// MENU SECTION
+    private $menu;
+    private $submenu;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->menu = $this->db->get_where('user_menu')->row_array();
+        $this->submenu = $this->db->get_where('user_sub_menu')->row_array();
+    }
 
 	// get all menu
 	public function getMenu()
@@ -26,7 +34,7 @@ class Menu_model extends CI_Model{
 		// if user upload file
         if ($data['icon']){
             // configuration
-            $config['allowed_types']        = 'gif|jpg|png';
+            $config['allowed_types']        = 'gif|jpeg|jpg|png';
             $config['upload_path']          = './assets/img/';
             $config['max_size']             = 100000;
 
@@ -35,7 +43,7 @@ class Menu_model extends CI_Model{
            
             if ($this->upload->do_upload('icon')){
                 
-                $old_image = $this->user['icon'];
+                $old_image = $this->menu['icon'];
                 // hapus gambar sebelumnya kecuali gambar default
                if ($old_image != 'default.jpg'){
                     // var_dump( FCPATH . 'assets/img/profile/' . $old_image);die;
@@ -63,6 +71,31 @@ class Menu_model extends CI_Model{
 	// edit menu
 	public function editMenu($data)
 	{
+		// if user upload file
+		if ($data['icon']){
+			// configuration
+			$config['allowed_types']        = 'gif|jpeg|jpg|png';
+			$config['upload_path']          = './assets/img/';
+			$config['max_size']             = 100000;
+
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			
+			if ($this->upload->do_upload('icon')){
+				
+				$old_image = $this->menu['icon'];
+				// hapus gambar sebelumnya kecuali gambar default
+				if ($old_image != 'default.jpg'){
+					// var_dump( FCPATH . 'assets/img/profile/' . $old_image);die;
+					unlink(FCPATH . 'assets/img/' . $old_image);
+				}
+
+				$this->db->set('icon', $data['icon']);
+			}else{
+				message($this->upload->display_errors(), 'danger', 'menu');
+			}
+		}
+
 		$this->db->where('id', $data['id']);
 		$this->db->update('user_menu', $data);
 
@@ -101,7 +134,7 @@ class Menu_model extends CI_Model{
 		// if user upload file
         if ($data['icon_file']){
             // configuration
-            $config['allowed_types']        = 'gif|jpg|png';
+            $config['allowed_types']        = 'gif|jpeg|jpg|png';
             $config['upload_path']          = './assets/img/';
             $config['max_size']             = 100000;
 
@@ -110,7 +143,7 @@ class Menu_model extends CI_Model{
            
             if ($this->upload->do_upload('icon_file')){
                 
-                $old_image = $this->user['icon_file'];
+                $old_image = $this->submenu['icon_file'];
                 // hapus gambar sebelumnya kecuali gambar default
                if ($old_image != 'default.jpg'){
                     // var_dump( FCPATH . 'assets/img/profile/' . $old_image);die;
@@ -119,7 +152,7 @@ class Menu_model extends CI_Model{
 
                 $this->db->set('icon_file', $data['icon_file']);
             }else{
-                message($this->upload->display_errors(), 'danger', 'menu');
+                message($this->upload->display_errors(), 'danger', 'menu/subMenu');
             }
         }
 		$this->db->insert('user_sub_menu', $data);
@@ -141,7 +174,7 @@ class Menu_model extends CI_Model{
 		// if user upload file
         if ($data['icon_file']){
             // configuration
-            $config['allowed_types']        = 'gif|jpg|png';
+            $config['allowed_types']        = 'gif|jpeg|jpg|png';
             $config['upload_path']          = './assets/img/';
             $config['max_size']             = 100000;
 
@@ -150,7 +183,7 @@ class Menu_model extends CI_Model{
            
             if ($this->upload->do_upload('icon_file')){
                 
-                $old_image = $this->user['icon_file'];
+                $old_image = $this->submenu['icon_file'];
                 // hapus gambar sebelumnya kecuali gambar default
                if ($old_image != 'default.jpg'){
                     // var_dump( FCPATH . 'assets/img/profile/' . $old_image);die;

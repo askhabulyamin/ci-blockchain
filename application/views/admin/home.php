@@ -35,45 +35,47 @@
         ?>
         <?php 
         $menuid = $m['id'];
-        $queryMenu = "SELECT *FROM `user_sub_menu` 
-                      LEFT JOIN `user_menu` ON `user_sub_menu`.`menu_id` = `user_menu`.`id`
-                      LEFT  JOIN `user_access_menu` ON `user_menu`.`id` = `user_access_menu`.`menu_id`
-                      LEFT JOIN `user_role` ON `user_access_menu`.`role_id` = `user_role`.`id`
-                      WHERE NOT (`user_sub_menu`.`menu_id`= 1 OR `user_sub_menu`.`menu_id`= 2 
-                      OR `user_sub_menu`.`menu_id`= 3) AND `user_access_menu`.`role_id` = $role_id 
-        ";
-        $menusub = $this->db->query($queryMenu)->result_array();
-        ?>
-        <?php foreach($menusub as $ms) : 
-        if($ms['menu_id'] == $menuid){
-          $urlsubmenu = $ms['url'];
-          $getmenuid = $ms['menu_id'];
-        }
-        ?>
-        <?php endforeach; ?>
-        <div class="col-xl-3 col-md-6 mb-4">
-          <div class="card shadow h-100 py-2">
-              <div class="card-body text-center">
-                  <div class="row  align-items-center">
-                      <div class="col-md-12">
-                        <img src="<?= base_url('assets/img/').$m['icon']; ?>"  class="img-thumbnail mb-4">
-                      </div>
-                      <div class="col-md-12">
+          $queryMenu = "SELECT *FROM `user_sub_menu` 
+                        LEFT JOIN `user_menu` ON `user_sub_menu`.`menu_id` = `user_menu`.`id`
+                        LEFT  JOIN `user_access_menu` ON `user_menu`.`id` = `user_access_menu`.`menu_id`
+                        LEFT JOIN `user_role` ON `user_access_menu`.`role_id` = `user_role`.`id`
+                        WHERE NOT (`user_sub_menu`.`menu_id`= 1 OR `user_sub_menu`.`menu_id`= 2 
+                        OR `user_sub_menu`.`menu_id`= 3) AND `user_access_menu`.`role_id` = $role_id 
+          ";
+          $menusub = $this->db->query($queryMenu)->result_array();
+          ?>
+            <?php foreach($menusub as $ms) : 
+              if($ms['menu_id'] == $menuid){
+                $urlsubmenu = $ms['url'];
+                $getmenuid = $ms['menu_id'];
+              }
+            ?>
+            <?php endforeach; ?>
+        <?php if ($m['id'] > 0) :?>
+          <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card shadow h-100 py-2">
+                <div class="card-body text-center">
+                    <div class="row  align-items-center">
+                        <div class="col-md-12">
+                          <img src="<?= base_url('assets/img/').$m['icon']; ?>"  class="img-thumbnail mb-4">
+                        </div>
+                        <div class="col-md-12">
 
-                          <a class="nav-link pb-0 getid" data-idmenu="<?= $getmenuid?>" href="<?= base_url('block/home?id='.$m['id']); ?>"><h4 class="text-center"> <?= $m['menu']; ?></h5></a>
+                            <a class="nav-link pb-0 getid" data-idmenu="<?= $getmenuid?>" href="<?= base_url('block/home?id='.$m['id']); ?>"><h4 class="text-center"> <?= $m['menu']; ?></h5></a>
 
-                      </div>
-                      <div class="col-md-12">
-                        <ul>
-                          <?php foreach($roles as $r) : ?>
-                          <li class="text-left"> <?= $r['role']; ?></li>
-                          <?php endforeach; ?>
-                        </ul>
-                      </div>
-                  </div>
-              </div>
+                        </div>
+                        <div class="col-md-12">
+                          <ul>
+                            <?php foreach($roles as $r) : ?>
+                            <li class="text-left"> <?= $r['role']; ?></li>
+                            <?php endforeach; ?>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
           </div>
-        </div>
+        <?php endif ; ?>
 
       <?php endforeach; ?>
 

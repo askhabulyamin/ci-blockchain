@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <form action="<?= base_url('block/validation'); ?>" enctype="multipart/form-data" method="post">
+    <form action="<?= base_url('block/validation?id='.$_GET['id']); ?>" enctype="multipart/form-data" method="post">
     <div class="row"> 
 
         <div class="col-xl-4">

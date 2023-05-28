@@ -23,6 +23,97 @@ class Block_model extends CI_Model{
 		return $this->db->query($query)->result_array();
 	}
 
+	// get all Transaction
+	public function getTransaction()
+	{
+		$role_id = $this->session->userdata('token');
+		$query = "SELECT * FROM `transaction` JOIN `user_token` ON `user_token`.`token` = `transaction`.`to_address` 
+		ORDER by transaction.id DESC
+		";
+
+		return $this->db->query($query)->result_array();
+	}
+
+		// get all Transaction
+	public function getToken($token)
+	{
+		$query = "SELECT * FROM `user_token` WHERE token= '$token' 
+		";
+
+		return $this->db->query($query)->result_array();
+	}
+
+	// get saldo
+	public function getSaldo($token)
+	{
+		$query = "SELECT * FROM `saldo` WHERE address = '$token' 
+		";
+
+		return $this->db->query($query)->result_array();
+	}
+	
+
+	// add subproject
+	public function addTransaction($data)
+	{
+		$this->db->insert('transaction', $data);
+		$address = $data['address'];
+		$addressto = $data['to_address'];
+		$querym = "SELECT * FROM `saldo` WHERE `address` = '$address'";
+		$queryme = $this->db->query($querym)->result_array();
+
+		$queryt = "SELECT * FROM `saldo` WHERE `address` = '$addressto'";
+		$queryto = $this->db->query($queryt)->result_array();
+
+
+		if ($queryme){ //menguragi saldo me
+			$saldo = $queryme['value'] - $data['value'];
+			$sld = [
+				'address' => $data['address'],
+				'value' => $saldo,
+				'timedate' =>  date('Y-m-d H:i:s')
+
+			];
+	
+			$this->db->where('address', $data['address']);
+			$this->db->update('saldo', $data);
+	
+			message('Send Payment Success!', 'success', 'block/transaction');
+	
+		} elseif ($queryto){ //menambah saldo to
+			$saldo = $queryto['value'] + $data['value'];
+			$sld = [
+				'address' => $data['address'],
+				'value' => $saldo,
+				'timedate' =>  date('Y-m-d H:i:s')
+
+			];
+
+			$this->db->where('address', $data['to_address']);
+			$this->db->update('saldo', $saldo);
+	
+			message('Send Payment Success!', 'success', 'block/transaction');
+
+		} else { //add saldo
+			$sld = [
+				'address' => $data['address'],
+				'value' => $data['value'],
+				'date_create' =>  date('Y-m-d H:i:s')
+			];
+
+			$this->db->insert('saldo', $sld);
+			message('Send Payment Success!', 'success', 'block/transaction');
+		}
+	}
+
+	// get last project
+    public function getLastTransaction()
+	{
+        $query = "SELECT * FROM `transaction` ORDER by id DESC LIMIT 1
+               ";
+		return $this->db->query($query)->result_array();
+	}
+
 	// get last project
     public function getLastBlock()
 	{
@@ -62,7 +153,7 @@ class Block_model extends CI_Model{
 
         
 		$this->db->insert('project', $data);
-		message('New project added!','success','admin');
+		message('New project added!','success','block/validation');
 	}
 
 	// delete project by id
