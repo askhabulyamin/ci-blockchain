@@ -100,7 +100,7 @@ class Menu extends CI_Controller {
 				'title' => $this->input->post('title'),
 				'menu_id' => $this->input->post('menu_id'),
 				'url' => $this->input->post('url'),
-				'icon_file' => $_FILES['file']['name'],
+				'icon_file' => $_FILES['icon_file']['name'],
 				'icon' => $this->input->post('icon'),
 				'is_active' => $this->input->post('is_active')
 			];
@@ -142,6 +142,7 @@ class Menu extends CI_Controller {
 				'title' => $this->input->post('title'),
 				'menu_id' => $this->input->post('menu_id'),
 				'url' => $this->input->post('url'),
+				'icon_file' => $_FILES['icon_file']['name'],
 				'icon' => $this->input->post('icon'),
 				'is_active' => $this->input->post('is_active')
 			];

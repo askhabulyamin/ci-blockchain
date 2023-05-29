@@ -3,19 +3,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth_model extends CI_Model{
 
-	public function registration_user($data = [])
+	public function registration_user($data,$token)
 	{
 		$this->db->insert('user', $data);
 		
 		// send email
-		$this->_sendEmail('verify', 'Email verification');
+		$this->_sendEmail('verify', 'Email verification',$token);
 		message('Congratulations! your account has been created. Please activate your account before 24 hours!', 'success', 'auth');
 	}
 
-	private function _sendEmail($type, $subject)
+	private function _sendEmail($type, $subject, $token)
 	{
 		// prepare the token
-		$token = base64_encode(random_bytes(32));
+		// $token = base64_encode(random_bytes(32));
 		$email = $this->input->post('email');
 		$user_token = [
 			'token' => $token,
@@ -164,6 +164,7 @@ class Auth_model extends CI_Model{
 					// set session
 					$data = [
 						'email' => $user['email'],
+						'token' => $user['token'],
 						'role_id' => $user['role_id']
 					];
 					$this->session->set_userdata($data);
@@ -203,10 +204,10 @@ class Auth_model extends CI_Model{
 
 	public function getUserByEmail($email)
 	{
-		return $this->db->get_where('user', ['email' => $email])->row_array();
-		// $query = "SELECT * FROM user AS u JOIN user_token AS ut ON u.email = ut.email
-		// 		  WHERE u.email = '$email'
-		// 		 ";
-		// return $this->db->query($query)->row_array();
+		// return $this->db->get_where('user', ['email' => $email])->row_array();
+		$query = "SELECT * FROM user AS u JOIN user_token AS ut ON u.email = ut.email
+				  WHERE u.email = '$email'
+				 ";
+		return $this->db->query($query)->row_array();
 	}
 }

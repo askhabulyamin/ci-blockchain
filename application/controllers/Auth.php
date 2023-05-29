@@ -6,16 +6,16 @@ class Auth extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
+		$this->load->library('encryption'); // load library secure yg telah kita buat
 		$this->load->library('form_validation');
 		$this->load->model('Auth_model');
 	}
 	public function index()
 	{
 		// if user is already login
-		if ($this->session->userdata('email')){
-			redirect('user');	
-		}
+		// if ($this->session->userdata('email')){
+		// 	redirect('user');	
+		// }
 
 		$data['title'] = 'Login page';
 
@@ -71,7 +71,8 @@ class Auth extends CI_Controller {
 				'is_active' => 0,
 				'date_created' => time()
 			];
-			$this->Auth_model->registration_user($data);
+			$token = $this->encryption->encrypt($this->input->post('username'));
+			$this->Auth_model->registration_user($data,$token);
 		}
 	}
 
