@@ -9,7 +9,7 @@ class Auth_model extends CI_Model{
 		
 		// send email
 		$this->_sendEmail('verify', 'Email verification',$token);
-		message('Congratulations! your account has been created. Please activate your account before 24 hours!', 'success', 'auth');
+		message('Congratulations! your account has been created.', 'success', 'auth');
 	}
 
 	private function _sendEmail($type, $subject, $token)
@@ -25,30 +25,32 @@ class Auth_model extends CI_Model{
 		$this->db->insert('user_token', $user_token);
 		// -------------
 
-		$config = [
-			'protocol'  => 'smtp',
-			'smtp_host' => 'ssl://smtp.googlemail.com',
-			'smtp_user' => 'ahmad.askhabulyamin@gmail.com',
-			'smtp_pass' =>  SMTP_PASS,
-			'smtp_port' =>  465,
-			'mailtype'  => 'html',
-			'charset'   => 'utf-8',
-			'newline'   => "\r\n"
-		];
-		$this->email->initialize($config);
+		// $config = [
+		// 	'protocol'  => 'smtp',
+		// 	'smtp_host' => 'ssl://smtp.googlemail.com',
+		// 	'smtp_user' => 'ahmad.askhabulyamin@gmail.com',
+		// 	'smtp_pass' =>  SMTP_PASS,
+		// 	'smtp_port' =>  465,
+		// 	'mailtype'  => 'html',
+		// 	'charset'   => 'utf-8',
+		// 	'newline'   => "\r\n"
+		// ];
+		// $this->email->initialize($config);
 
-		$this->email->from('ahmad.askhabulyamin@gmail.com', 'Registrasi');
-		$this->email->to($email);
+		// $this->email->from('ahmad.askhabulyamin@gmail.com', 'Registrasi');
+		// $this->email->to($email);
 		
-		$this->email->subject($subject);
-		$this->email->message($this->_templateEmail($user_token, $type));
+		// $this->email->subject($subject);
+		// $this->email->message($this->_templateEmail($user_token, $type));
 
-		if ($this->email->send()) {
-			return true;
-		} else {
-			echo $this->email->print_debugger();
-			die;
-		}
+		// if ($this->email->send()) {
+		// 	return true;
+		// } else {
+		// 	echo $this->email->print_debugger();
+		// 	die;
+		// }
+		return true;
+
 	}
 
 	// untuk verifikasi

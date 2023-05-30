@@ -17,7 +17,7 @@ class Block_model extends CI_Model{
 	{
 		$role_id = $this->session->userdata('role_id');
 		$query = "SELECT * FROM `project` JOIN `user_role` ON `user_role`.`id` = `project`.`role` 
-		WHERE `project`.`role` = $role_id AND `project`.`sub_menuid` = $getid ORDER by project.id DESC
+		WHERE `project`.`sub_menuid` = $getid ORDER by project.id DESC
 		";
 
 		return $this->db->query($query)->result_array();
@@ -56,53 +56,68 @@ class Block_model extends CI_Model{
 	// add subproject
 	public function addTransaction($data)
 	{
-		$this->db->insert('transaction', $data);
 		$address = $data['address'];
 		$addressto = $data['to_address'];
 		$querym = "SELECT * FROM `saldo` WHERE `address` = '$address'";
 		$queryme = $this->db->query($querym)->result_array();
-
 		$queryt = "SELECT * FROM `saldo` WHERE `address` = '$addressto'";
 		$queryto = $this->db->query($queryt)->result_array();
-
-
-		if ($queryme){ //menguragi saldo me
-			$saldo = $queryme['value'] - $data['value'];
-			$sld = [
-				'address' => $data['address'],
-				'value' => $saldo,
-				'timedate' =>  date('Y-m-d H:i:s')
-
-			];
+		// var_dump($data);
+		if($addressto != $address){
+			if ($queryme){ //menguragi saldo me
+				$saldoawal = $queryme[0]['value'];
+				$tf = $data['value'];
+				$saldo = $queryme[0]['value'] - $data['value'];
+				if ( $saldoawal > $tf ){
+					$sld = [
+						'address' => $data['address'],
+						'value' => $saldo,
+						'timedate' =>  date('Y-m-d H:i:s')
+		
+					];	
+					$this->db->where('address', $data['address']);
+					$this->db->update('saldo', $sld);
+			
+					message('Send Payment Success!', 'Success', 'block/transaction');
 	
-			$this->db->where('address', $data['address']);
-			$this->db->update('saldo', $data);
-	
-			message('Send Payment Success!', 'success', 'block/transaction');
-	
-		} elseif ($queryto){ //menambah saldo to
-			$saldo = $queryto['value'] + $data['value'];
-			$sld = [
-				'address' => $data['address'],
-				'value' => $saldo,
-				'timedate' =>  date('Y-m-d H:i:s')
+				} else {
+					message('Saldo Tidak Cukup!', 'danger', 'block/transaction');
+				}
+		
+		
+			} elseif ($queryto){ //menambah saldo to
+				$saldo = $queryto['value'] + $data['value'];
 
-			];
+				$sld = [
+					'address' => $data['address'],
+					'value' => $saldo,
+					'timedate' =>  date('Y-m-d H:i:s')
 
-			$this->db->where('address', $data['to_address']);
-			$this->db->update('saldo', $saldo);
-	
-			message('Send Payment Success!', 'success', 'block/transaction');
+				];
 
-		} else { //add saldo
-			$sld = [
-				'address' => $data['address'],
-				'value' => $data['value'],
-				'date_create' =>  date('Y-m-d H:i:s')
-			];
+				$this->db->where('address', $data['to_address']);
+				$this->db->update('saldo', $sld);
+		
+				message('Send Payment Success!', 'success', 'block/transaction');
 
-			$this->db->insert('saldo', $sld);
-			message('Send Payment Success!', 'success', 'block/transaction');
+			} elseif ($queryto == 0){
+
+			}
+			 else { //add saldo
+				$sld = [
+					'address' => $data['address'],
+					'value' => $data['value'],
+					'date_create' =>  date('Y-m-d H:i:s')
+				];
+
+				$this->db->insert('saldo', $sld);
+				message('Send Payment Success!', 'success', 'block/transaction');
+			}
+			$this->db->insert('transaction', $data);
+
+		} else {
+			message('Smart Contract tidak boleh sama!', 'danger', 'block/transaction');
+
 		}
 	}
 

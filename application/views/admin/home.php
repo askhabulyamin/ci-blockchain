@@ -29,7 +29,7 @@
           $querySubMenu = "SELECT * 
                               FROM `user_role`
                               LEFT  JOIN `user_access_menu` ON `user_role`.`id` = `user_access_menu`.`role_id`
-                              WHERE `user_access_menu`.menu_id = $role
+                              WHERE `user_access_menu`.menu_id = $role ORDER BY user_role.id asc
           ";
           $roles = $this->db->query($querySubMenu)->result_array(); 
         ?>
