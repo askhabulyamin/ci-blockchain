@@ -111,7 +111,7 @@ class Block_model extends CI_Model{
 					}
 
 					$this->db->insert('transaction', $data);
-					message('Send Payment Success!', 'Success', 'block/transaction');
+					message('Send Payment Success!', 'success', 'block/transaction');
 	
 				} else {
 					message('Saldo Tidak Cukup!', 'danger', 'block/transaction');

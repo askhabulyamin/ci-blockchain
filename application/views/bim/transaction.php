@@ -1,6 +1,14 @@
 <div class="container-fluid">
     <h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
+    <!-- <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><?= $title; ?></li>
+        </ol>
+    </nav> -->
     <div class="row ">
+
         <div class="col-lg">
         <?php if (validation_errors()) : ?>
             <div class="alert alert-danger" role="alert">
