@@ -24,10 +24,11 @@ class Block_model extends CI_Model{
 	}
 
 	// get all Transaction
-	public function getTransaction()
+	public function getTransaction($token)
 	{
 		$role_id = $this->session->userdata('token');
 		$query = "SELECT * FROM `transaction` JOIN `user_token` ON `user_token`.`token` = `transaction`.`to_address` 
+		WHERE `transaction`.`to_address` = '$token' OR `transaction`.`address` = '$token'
 		ORDER by transaction.id DESC
 		";
 
@@ -56,58 +57,90 @@ class Block_model extends CI_Model{
 	// add subproject
 	public function addTransaction($data)
 	{
-		$this->db->insert('transaction', $data);
 		$address = $data['address'];
 		$addressto = $data['to_address'];
+
 		$querym = "SELECT * FROM `saldo` WHERE `address` = '$address'";
 		$queryme = $this->db->query($querym)->result_array();
 		$queryt = "SELECT * FROM `saldo` WHERE `address` = '$addressto'";
 		$queryto = $this->db->query($queryt)->result_array();
+
 		// var_dump($data);
 		if($addressto != $address){
 			if ($queryme){ //menguragi saldo me
 				$saldoawal = $queryme[0]['value'];
+				$saldoawalto = $queryto[0]['value'];
+
 				$tf = $data['value'];
-				$saldo = $queryme[0]['value'] - $data['value'];
+				$saldo = $saldoawal - $data['value'];
+
+				// saldo to address
+				$saldoplus = $saldoawalto + $data['value'];
+
 				if ( $saldoawal > $tf ){
 					$sld = [
-						'address' => $data['address'],
+						'address' => $address,
 						'value' => $saldo,
 						'timedate' =>  date('Y-m-d H:i:s')
 		
 					];	
-					$this->db->where('address', $data['address']);
+
+					$addsldto = [
+						'address' => $addressto,
+						'value' => $tf,
+						'timedate' =>  date('Y-m-d H:i:s')
+					];	
+
+					$updatesldto = [
+						'address' => $addressto,
+						'value' => $saldoplus,
+						'timedate' =>  date('Y-m-d H:i:s')
+					];	
+
+
+					$this->db->where('address', $address);
 					$this->db->update('saldo', $sld);
-			
-					message('Send Payment Success!', 'Success', 'block/transaction');
+
+					// cek addres to
+					if ($queryto){ //jika ada data to address
+						$this->db->where('address', $addressto);
+						$this->db->update('saldo', $updatesldto);
+
+					} else {
+						$this->db->insert('saldo', $addsldto);
+					}
+
+					$this->db->insert('transaction', $data);
+					message('Send Payment Success!', 'success', 'block/transaction');
 	
 				} else {
 					message('Saldo Tidak Cukup!', 'danger', 'block/transaction');
 				}
 		
 		
-			} elseif ($queryto){ //menambah saldo to
-				$saldo = $queryto['value'] + $data['value'];
+			} 
+			// elseif ($queryto){ //menambah saldo to
+			// 	$saldo = $queryto['value'] + $data['value'];
 
-				$sld = [
-					'address' => $data['address'],
-					'value' => $saldo,
-					'timedate' =>  date('Y-m-d H:i:s')
+			// 	$sld = [
+			// 		'address' => $data['address'],
+			// 		'value' => $saldo,
+			// 		'timedate' =>  date('Y-m-d H:i:s')
 
-				];
+			// 	];
 
-				$this->db->where('address', $data['to_address']);
-				$this->db->update('saldo', $sld);
+			// 	$this->db->where('address', $data['to_address']);
+			// 	$this->db->update('saldo', $sld);
 		
-				message('Send Payment Success!', 'success', 'block/transaction');
+			// 	message('Send Payment Success!', 'success', 'block/transaction');
 
-			} elseif ($queryto == 0){
+			// } elseif ($queryto == 0){
 
-			}
-			 else { //add saldo
+			// }
+			else { //add saldo
 				$sld = [
-					'address' => $data['address'],
-					'value' => $data['value'],
+					'address' => $address,
+					'value' => $tf,
 					'date_create' =>  date('Y-m-d H:i:s')
 				];
 

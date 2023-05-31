@@ -1,6 +1,14 @@
 <div class="container-fluid">
     <h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
+    <!-- <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><?= $title; ?></li>
+        </ol>
+    </nav> -->
     <div class="row ">
+
         <div class="col-lg">
         <?php if (validation_errors()) : ?>
             <div class="alert alert-danger" role="alert">
@@ -40,9 +48,9 @@
         <div class="col-xl-4">
             <!--File -->
             <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Smart Contract</div>
+                <div class="card-header">My Balance</div>
                 <div class="card-body ">
-                    <div class=" font-italic text-muted mb-4"><i class="fas fa-dollar-sign"></i> = Rp.<?= $saldo ?>,00</div>
+                    <div class=" font-italic text-muted mb-4"><i class="fas fa-dollar-sign"></i> = Rp.<?= number_format($saldo,2,'.','.') ?></div>
                     Address = <?= $user['token'] ?>
                 </div>
              </div>
@@ -68,13 +76,15 @@
 				  <tbody>
 				  	  <?php $i = 1; ?>
 					  <?php foreach($transaction as $sm) : 
+                        $rp = number_format($sm['value'],2,'.','.');
+                        $add = substr($sm['address'],0,10); //minimal 10 karakter
                         $addto = substr($sm['to_address'],0,10); //minimal 10 karakter
                         ?>
 					    <tr>
 					      <th scope="row"><?= $i++; ?></th>
 					      <!-- <td><?= $sm['id_block']; ?></td> -->
-					      <td><?= $sm['address']; ?></td>
-					      <td><?= $sm['value']; ?></td>
+					      <td><?= $add; ?>...</td>
+					      <td>Rp.<?= $rp; ?></td>
 					      <td><?= $addto; ?>...</td>
 					      <!-- <td><?= $sm['status']; ?></td> -->
 					      <!-- <td>
