@@ -200,6 +200,40 @@ class Block extends CI_Controller {
 				
 	}
 
+	// Validation
+	public function smartcontract()
+	{
+		// get user information
+		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
+		$token = $this->Auth->getUserByEmail( $this->session->userdata('email') );
+		// $getid = $_GET['id'];
+		// $data['block'] = $this->Block_model->getBlock($getid);
+		$data['smartcontract'] = $this->Block_model->getTransaction(); 
+		if ($this->Block_model->getSaldo($token['token'])){
+			$getsaldo = $this->Block_model->getSaldo($token['token']);
+			$saldo = $getsaldo[0]['value'];
+			// var_dump($getsaldo);
+		} else {
+			$saldo = 0;
+		}
+		$data['saldo'] = $saldo;
+		$data['title'] = 'Smart Contract';
+
+		$this->form_validation->set_rules('to_address', 'To Address', 'required|trim');
+		$this->form_validation->set_rules('value', 'Value', 'required|trim');
+		// $this->form_validation->set_rules('role', 'Role', 'required|trim');
+
+		if ($this->form_validation->run() == false){
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/sidebar', $data);
+			$this->load->view('templates/topbar', $data);
+			$this->load->view('bim/smart_contract', $data);
+			$this->load->view('templates/footer');
+
+		}
+				
+	}
+
 	// Verification
 	public function verification()
 	{

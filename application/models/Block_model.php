@@ -56,6 +56,7 @@ class Block_model extends CI_Model{
 	// add subproject
 	public function addTransaction($data)
 	{
+		$this->db->insert('transaction', $data);
 		$address = $data['address'];
 		$addressto = $data['to_address'];
 		$querym = "SELECT * FROM `saldo` WHERE `address` = '$address'";
@@ -113,7 +114,6 @@ class Block_model extends CI_Model{
 				$this->db->insert('saldo', $sld);
 				message('Send Payment Success!', 'success', 'block/transaction');
 			}
-			$this->db->insert('transaction', $data);
 
 		} else {
 			message('Smart Contract tidak boleh sama!', 'danger', 'block/transaction');
