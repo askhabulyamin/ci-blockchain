@@ -68,14 +68,14 @@
 				  <tbody>
 				  	  <?php $i = 1; ?>
 					  <?php foreach($transaction as $sm) : 
-                        $addto = substr($sm['to_address'],10); //minimal 10 karakter
+                        $addto = substr($sm['to_address'],0,10); //minimal 10 karakter
                         ?>
 					    <tr>
 					      <th scope="row"><?= $i++; ?></th>
 					      <!-- <td><?= $sm['id_block']; ?></td> -->
 					      <td><?= $sm['address']; ?></td>
 					      <td><?= $sm['value']; ?></td>
-					      <td><?= $addto; ?></td>
+					      <td><?= $addto; ?>...</td>
 					      <!-- <td><?= $sm['status']; ?></td> -->
 					      <!-- <td>
 							<a href="" data-id="<?= $sm['id']; ?>" class="badge badge-success submenu-edit" data-toggle="modal" data-target="#newSubmenuModal">Edit</a>
