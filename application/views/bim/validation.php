@@ -29,7 +29,7 @@
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">DOC, XLS, PPT, JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button-->
-                    <label for="apply" class="btn-upload btn btn-primary"><input type="file" name="file" id="apply" accept="image/*,.pdf">Upload new FIle</label>
+                    <label for="apply" class="btn-upload btn btn-primary"><input type="file" name="file" id="apply"  multiple>Upload new FIle</label>
                 </div>
                 <div class="card-footer">
                     Hash = <?= $hash ?>
