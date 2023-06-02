@@ -71,6 +71,7 @@ class Block extends CI_Controller {
 		$data['user'] = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		
 		$getid = $_GET['id'];
+		// var_dump($getid);
 		$data['block'] = $this->Block_model->getBlock($getid);
 		$data['role'] = $this->admin->getRole(); 
 
@@ -107,12 +108,14 @@ class Block extends CI_Controller {
 			$this->load->view('templates/footer');
 
 		}else{ 	
+			$filename = $_FILES['file']['name'];
+			$newfile = date('YmdHis').".".pathinfo($filename, PATHINFO_EXTENSION);
 			$data = [
 				'project_name' => $this->input->post('project_name'),
 				'type' => $this->input->post('type'),
 				'role' => $this->session->userdata('role_id'),
 				'sub_menuid' => $this->input->post('getidsub'),
-				'file' => $_FILES['file']['name'],
+				'file' => $newfile,
 				'previous_blockchain' => $this->encryption->encrypt($prev_hash),
 				'hash_bim' => $this->encryption->encrypt($prev_hash),
 				'nonce' => $this->encryption->encrypt($prev_hash),

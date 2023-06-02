@@ -17,7 +17,7 @@ class Block_model extends CI_Model{
 	{
 		$role_id = $this->session->userdata('role_id');
 		$query = "SELECT * FROM `project` JOIN `user_role` ON `user_role`.`id` = `project`.`role` 
-		WHERE `project`.`sub_menuid` = $getid ORDER by project.id DESC
+		WHERE `project`.`sub_menuid` = $getid 
 		";
 
 		return $this->db->query($query)->result_array();
@@ -180,6 +180,8 @@ class Block_model extends CI_Model{
             $config['allowed_types']        = 'gif|jpg|jpeg|png|iso|dmg|zip|rar|doc|docx|xls|xlsx|ppt|pptx|csv|ods|odt|odp|pdf|rtf|sxc|sxi|txt|exe|avi|mpeg|mp3|mp4|3gp';
             $config['upload_path']          = './uploads/';
             $config['max_size']             = 100000;
+			// $new_name = time().$_FILES["file"]['name'];
+			$config['file_name'] = $data['file'];
 
             $this->load->library('upload');
             $this->upload->initialize($config);
@@ -194,14 +196,13 @@ class Block_model extends CI_Model{
                 // }
 
                 $this->db->set('file', $data['file']);
-            }else{
-                message($this->upload->display_errors(), 'danger', 'block/validation');
+            } else{
+                message($this->upload->display_errors(), 'danger', 'block/validation?id='.$data['sub_menuid']);
             }
         }
-
         
 		$this->db->insert('project', $data);
-		message('New project added!','success','block/validation');
+		message('New project added!','success','block?id='.$data['sub_menuid']);
 	}
 
 	// delete project by id
