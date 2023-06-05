@@ -211,7 +211,7 @@ class Block extends CI_Controller {
 		$token = $this->Auth->getUserByEmail( $this->session->userdata('email') );
 		// $getid = $_GET['id'];
 		// $data['block'] = $this->Block_model->getBlock($getid);
-		$data['smartcontract'] = $this->Block_model->getTransaction(); 
+		$data['smartcontract'] = $this->Block_model->getTransaction($token['token']); 
 		if ($this->Block_model->getSaldo($token['token'])){
 			$getsaldo = $this->Block_model->getSaldo($token['token']);
 			$saldo = $getsaldo[0]['value'];
